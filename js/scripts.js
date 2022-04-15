@@ -35,6 +35,7 @@ fetch("/js/data.json")
   .then(() => localStorage.setItem("cartStock0", JSON.stringify(bringProducts)))
   .then(() => saleProducts())
   .then(() => defineUpToDateStock());
+// .then(() => deleteProduct());
 
 // Funcion para que se muestren los productos en oferta unicamente al presionar el enlace "oferta"
 let backUp;
@@ -175,6 +176,7 @@ function renderCart() {
   tbody.innerHTML = "";
   cart.map((item) => {
     const tr = document.createElement("tr");
+    tr.classList.add("cartItem");
     const content = `
     <th scope="row">1</th>
     <td class="table__products">
@@ -184,7 +186,7 @@ function renderCart() {
     <td class="table__price"><p>$ ${item.price}</p></td>
     <td class="table__cantidad">
     <input type="number" min="1" value=${item.cantidad} class="input__elemento">
-    <button class="delete btn btn-danger">x</button>
+    <button onclick="deleteProduct()" class="select delete btn btn-danger">x</button>
     </td>
     
     `;
@@ -228,3 +230,10 @@ startEnter();
 window.onload = function () {
   renderCart();
 };
+
+function deleteProduct(item) {
+  console.log("anda");
+  const deleteButton = document.querySelector(".select");
+  const tr = deleteButton.closest(".cartItem");
+  tr.remove();
+}
