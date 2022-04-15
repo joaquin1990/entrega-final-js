@@ -21,10 +21,11 @@ function cartLength() {
 }
 cartLength();
 
-// Funcion para empezar a trabajar con una base de datos traida desde un archivo JSON:
+// Fetch para empezar a trabajar con una base de datos traida desde un archivo data.JSON:
 let bringProducts = [];
 let cart;
 let testing;
+let upToDateStock;
 fetch("/js/data.json")
   .then((res) => res.json())
   .then((data) => {
@@ -32,20 +33,24 @@ fetch("/js/data.json")
   })
   .then(() => generateCards(bringProducts))
   .then(() => localStorage.setItem("cartStock0", JSON.stringify(bringProducts)))
-  .then(() => (testing = JSON.parse(localStorage.getItem("cartStock0"))))
-  .then(() => console.log(testing))
   .then(() => saleProducts())
-  .then(() => (cart = getStorage()));
+  .then(() => defineUpToDateStock());
 
-// Para soluionar el problema de asyncronicidad que estoy teniendo, hice estas dos funciones para que el programa sea funcional. Posteriormente sacar esta funcion para que todo funcione mejor.
-let upToDateStock;
-function solvingAsyncronicProblem() {
-  setTimeout(defineUpToDateStock, 1000);
+// Funcion para que se muestren los productos en oferta unicamente al presionar el enlace "oferta"
+let backUp;
+function saleProducts() {
+  backUp = JSON.parse(localStorage.getItem("cartStock0"));
+  const saleProducts = backUp.filter((product) => product.status === "offer");
+  const saleButton = document.getElementById("sale-product");
+  saleButton.onclick = () => generateCards(saleProducts);
 }
+
+// Funcion "defineUpToStock" con condicional, para que dependiendo de la situacion, si ya hay items en el carrito o no, UpToDateStock copie al "cartStock" o que se inicie copiando a backUp.
 function defineUpToDateStock() {
-  upToDateStock = JSON.parse(localStorage.getItem("cartStock0"));
+  localStorage.getItem("cartStock") === null
+    ? (upToDateStock = backUp)
+    : (upToDateStock = JSON.parse(localStorage.getItem("cartStock")));
 }
-solvingAsyncronicProblem();
 
 // Validacion de si el cart en el local storage es null, o si tiene elementos adentro con un ternario.
 function stockValidation() {
@@ -54,91 +59,6 @@ function stockValidation() {
 }
 stockValidation();
 
-// Esta viene a ser nuestra Base de datos:
-// const products = [
-//   {
-//     id: 0,
-//     title: "Vela de Rosa",
-//     price: 760,
-//     stock: 2,
-//     image: "./images/hogar-holístico.jpeg",
-//     status: "normal",
-//     cantidad: 0,
-//   },
-//   {
-//     id: 1,
-//     title: "Vela de Vainilla",
-//     price: 730,
-//     stock: 2,
-//     image: "./images/hogar-holístico.jpeg",
-//     status: "offer",
-//     cantidad: 0,
-//   },
-//   {
-//     id: 2,
-//     title: "Aromatizante de lavanda",
-//     price: 550,
-//     stock: 3,
-//     image: "./images/hogar-holístico.jpeg",
-//     status: "normal",
-//     cantidad: 0,
-//   },
-//   {
-//     id: 3,
-//     title: "Aromatizante Night",
-//     price: 550,
-//     stock: 4,
-//     image: "./images/hogar-holístico.jpeg",
-//     status: "normal",
-//     cantidad: 0,
-//   },
-//   {
-//     id: 4,
-//     title: "Aromatizante Daytime",
-//     price: 530,
-//     stock: 3,
-//     image: "./images/hogar-holístico.jpeg",
-//     status: "normal",
-//     cantidad: 0,
-//   },
-//   {
-//     id: 5,
-//     title: "Aromatizante Morning",
-//     price: 540,
-//     stock: 1,
-//     image: "./images/hogar-holístico.jpeg",
-//     status: "offer",
-//     cantidad: 0,
-//   },
-//   {
-//     id: 6,
-//     title: "Aromatizante de Eucaliptus",
-//     price: 500,
-//     stock: 0,
-//     image: "./images/hogar-holístico.jpeg",
-//     status: "normal",
-//     cantidad: 0,
-//   },
-//   {
-//     id: 7,
-//     title: "Aromatizante de Limon",
-//     price: 540,
-//     stock: 3,
-//     image: "./images/hogar-holístico.jpeg",
-//     status: "offer",
-//     cantidad: 0,
-//   },
-//   {
-//     id: 8,
-//     title: "Vela de Pino",
-//     price: 740,
-//     stock: 2,
-//     image: "./images/hogar-holístico.jpeg",
-//     status: "normal",
-//     cantidad: 0,
-//   },
-// ];
-// console.log(products);
 // Con la funcion generateCards, a traves de un forEach recorre el parametro de la funcion (deberia ser un array), y va agregando a traves de un forEach todos los productos al cardAccumulator. La funcion temrina con otra funcion “showCardsInHTML“ que tiene como parametro el cardAccumulator variable let de la actual funcion.
 function generateCards(productsToShow) {
   let cardAccumulator = ``;
@@ -194,10 +114,6 @@ function trigger(e) {
   const variableId = parseInt(e);
   addToCart(variableId);
 }
-
-// Estas dos lineas son para setear el "cartStock0", y para crear la variable upToDateStock para poder manejar el stock en el storage.
-// localStorage.setItem("cartStock0", JSON.stringify(products));
-// const upToDateStock = JSON.parse(localStorage.getItem("cartStock0"));
 
 // Funcion "addToCart()" para agregar productos al cart.
 function addToCart(id) {
@@ -283,7 +199,7 @@ function searchProduct() {
     .getElementById("searched-product")
     .value.toUpperCase()
     .trim();
-  const findedProducts = upToDateStock.filter((product) =>
+  const findedProducts = backUp.filter((product) =>
     // Usar en vez de products lo del localstorage
     product.title.toUpperCase().match(productSearchedName)
   );
@@ -299,38 +215,16 @@ function searchProduct() {
 // Funcion para que ande el enter en el buscador.
 function startEnter() {
   const input = document.getElementById("searched-product");
-  input.addEventListener("keyup", function (event) {
-    if (event.keyCode === 13) {
-      event.preventDefault();
+  input.addEventListener("keyup", function (e) {
+    if (e.keyCode === 13) {
+      e.preventDefault();
       document.getElementById("search-button").click();
     }
   });
 }
 startEnter();
 
-// Funcion para que se muestren los productos en oferta unicamente al presionar el enlace "oferta"
-let backUp;
-function saleProducts() {
-  backUp = JSON.parse(localStorage.getItem("cartStock0"));
-  const saleProducts = backUp.filter((product) => product.status == "offer");
-  const saleButton = document.getElementById("sale-product");
-  saleButton.onclick = () => generateCards(saleProducts);
-}
-
-// Condicional para que se corra o no la funcion de saleProduct()
-// let loadTest = JSON.parse(localStorage.getItem("cartStock"));
-// console.log(loadTest);
-// backUp === null ? console.log("No hay datos") : saleProducts();
-
-// WindowOnload
+// FUncion window.onload, es para que cuando actualicemos la pagina, que se corra la funcion renderCart() para se muestren los productos en el carrito.
 window.onload = function () {
-  const storage = JSON.parse(localStorage.getItem("cart"));
-  if (storage) {
-    cart = storage;
-  }
   renderCart();
 };
-
-// - Poner todo adentro de una funcion con parametro e, que se dispare con un evento, y que tambien sea asyncrona, osea que se cargue despues de que se hayan traido los datos de la base de datos.
-// -
-// -
