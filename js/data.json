@@ -1,0 +1,83 @@
+[
+  {
+    "id": 0,
+    "title": "Vela de Rosa",
+    "price": 760,
+    "stock": 2,
+    "image": "./images/hogar-holístico.jpeg",
+    "status": "normal",
+    "cantidad": 0
+  },
+  {
+    "id": 1,
+    "title": "Vela de Vainilla",
+    "price": 730,
+    "stock": 2,
+    "image": "./images/hogar-holístico.jpeg",
+    "status": "offer",
+    "cantidad": 0
+  },
+  {
+    "id": 2,
+    "title": "Aromatizante de lavanda",
+    "price": 550,
+    "stock": 3,
+    "image": "./images/hogar-holístico.jpeg",
+    "status": "normal",
+    "cantidad": 0
+  },
+  {
+    "id": 3,
+    "title": "Aromatizante Night",
+    "price": 550,
+    "stock": 14,
+    "image": "./images/hogar-holístico.jpeg",
+    "status": "normal",
+    "cantidad": 0
+  },
+  {
+    "id": 4,
+    "title": "Aromatizante Daytime",
+    "price": 530,
+    "stock": 3,
+    "image": "./images/hogar-holístico.jpeg",
+    "status": "normal",
+    "cantidad": 0
+  },
+  {
+    "id": 5,
+    "title": "Aromatizante Morning",
+    "price": 540,
+    "stock": 1,
+    "image": "./images/hogar-holístico.jpeg",
+    "status": "offer",
+    "cantidad": 0
+  },
+  {
+    "id": 6,
+    "title": "Aromatizante de Eucaliptus",
+    "price": 500,
+    "stock": 0,
+    "image": "./images/hogar-holístico.jpeg",
+    "status": "normal",
+    "cantidad": 0
+  },
+  {
+    "id": 7,
+    "title": "Aromatizante de Limon",
+    "price": 540,
+    "stock": 3,
+    "image": "./images/hogar-holístico.jpeg",
+    "status": "offer",
+    "cantidad": 0
+  },
+  {
+    "id": 8,
+    "title": "Vela de Pino",
+    "price": 740,
+    "stock": 2,
+    "image": "./images/hogar-holístico.jpeg",
+    "status": "normal",
+    "cantidad": 0
+  }
+]
