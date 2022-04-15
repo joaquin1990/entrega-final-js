@@ -24,6 +24,7 @@ cartLength();
 // Funcion para empezar a trabajar con una base de datos traida desde un archivo JSON:
 let bringProducts = [];
 let cart;
+let testing;
 fetch("/js/data.json")
   .then((res) => res.json())
   .then((data) => {
@@ -31,6 +32,9 @@ fetch("/js/data.json")
   })
   .then(() => generateCards(bringProducts))
   .then(() => localStorage.setItem("cartStock0", JSON.stringify(bringProducts)))
+  .then(() => (testing = JSON.parse(localStorage.getItem("cartStock0"))))
+  .then(() => console.log(testing))
+  .then(() => saleProducts())
   .then(() => (cart = getStorage()));
 
 // Para soluionar el problema de asyncronicidad que estoy teniendo, hice estas dos funciones para que el programa sea funcional. Posteriormente sacar esta funcion para que todo funcione mejor.
@@ -216,6 +220,7 @@ function addToCart(id) {
     );
   }
   // Modificacion de stock:
+  console.log(upToDateStock);
   let modifiedStock = upToDateStock[id].stock - quantityValue;
   upToDateStock[id].stock = modifiedStock;
   localStorage.setItem("cartStock", JSON.stringify(upToDateStock));
@@ -244,13 +249,7 @@ function addToCart(id) {
     );
     setStorage(cart);
   }
-  // Este ultimo fragmento de codigo es para tener actualizada la cantidad de items que hay en el carrito:
-  const bringCart = JSON.parse(localStorage.getItem("cart"));
-  let cartCounter = 0;
-  for (prods of bringCart) {
-    cartCounter += prods.cantidad;
-  }
-  document.getElementById("prod-quantity").innerHTML = cartCounter;
+  cartLength();
 }
 
 // Funcion renderCart, lo que hace es agregar en la seccion del HTML los productos que se van seleccionando.
@@ -266,7 +265,7 @@ function renderCart() {
     <img src=${item.image}  alt="">
     <h6 class="title">${item.title}</h6>
     </td>
-    <td class="table__price"><p>${item.price}</p></td>
+    <td class="table__price"><p>$ ${item.price}</p></td>
     <td class="table__cantidad">
     <input type="number" min="1" value=${item.cantidad} class="input__elemento">
     <button class="delete btn btn-danger">x</button>
@@ -311,16 +310,13 @@ startEnter();
 
 // Funcion para que se muestren los productos en oferta unicamente al presionar el enlace "oferta"
 let backUp;
-const saleProducts = async () => {
-  backUp = await JSON.parse(localStorage.getItem("cartStock0"));
-  await console.log(backUp);
-  const saleProducts = await backUp.filter(
-    (product) => product.status == "offer"
-  );
+function saleProducts() {
+  backUp = JSON.parse(localStorage.getItem("cartStock0"));
+  const saleProducts = backUp.filter((product) => product.status == "offer");
   const saleButton = document.getElementById("sale-product");
   saleButton.onclick = () => generateCards(saleProducts);
-};
-saleProducts();
+}
+
 // Condicional para que se corra o no la funcion de saleProduct()
 // let loadTest = JSON.parse(localStorage.getItem("cartStock"));
 // console.log(loadTest);
