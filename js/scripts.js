@@ -26,6 +26,7 @@ let bringProducts = [];
 let cart;
 let testing;
 let upToDateStock;
+let backUp;
 fetch("/js/data.json")
   .then((res) => res.json())
   .then((data) => {
@@ -38,7 +39,6 @@ fetch("/js/data.json")
 // .then(() => deleteProduct());
 
 // Funcion para que se muestren los productos en oferta unicamente al presionar el enlace "oferta"
-let backUp;
 function saleProducts() {
   backUp = JSON.parse(localStorage.getItem("cartStock0"));
   const saleProducts = backUp.filter((product) => product.status === "offer");
@@ -137,13 +137,13 @@ function addToCart(id) {
     );
   }
   // Modificacion de stock:
-  console.log(upToDateStock);
   let modifiedStock = upToDateStock[id].stock - quantityValue;
   upToDateStock[id].stock = modifiedStock;
   localStorage.setItem("cartStock", JSON.stringify(upToDateStock));
-  let selectedProduct = upToDateStock.find((element) => element.id === id);
+  let selectedProduct = backUp.find((element) => element.id === id);
+  console.log(backUp);
+  console.log(upToDateStock);
   let index = cart.findIndex((prod) => prod.id === id);
-  console.log(index);
   if (index !== -1) {
     cart[index].cantidad = cart[index].cantidad + quantityValue;
     swal(
@@ -186,7 +186,7 @@ function renderCart() {
     <td class="table__price"><p>$ ${item.price}</p></td>
     <td class="table__cantidad">
     <input type="number" min="1" value=${item.cantidad} class="input__elemento">
-    <button onclick="deleteProduct()" class="select delete btn btn-danger">x</button>
+    <button onclick="deleteProduct(${item.id})" id=deleteButton-${item.id} class="select delete btn btn-danger">x</button>
     </td>
     
     `;
@@ -231,9 +231,22 @@ window.onload = function () {
   renderCart();
 };
 
-function deleteProduct(item) {
-  console.log("anda");
-  const deleteButton = document.querySelector(".select");
+// Funcion para eliminar productos que esten en el renderizado del carro
+function deleteProduct(id) {
+  const deleteButton = document.getElementById("deleteButton-" + id);
   const tr = deleteButton.closest(".cartItem");
+  const title = tr.querySelector(".title").textContent;
+  cart.forEach((prods) => {
+    if (prods.title === title) {
+      const indexProd = cart.findIndex((prods) => prods.title === title);
+      cart.splice(indexProd, 1);
+      setStorage(cart);
+    }
+  });
+
+  console.log(title);
+
   tr.remove();
 }
+
+// Tendriamos que correlacionar los stock de los 3 localStorage para que si elimino algo del cart, que se modifique tambien en los otros lugares. Asi cuando eliminamos algo del carrito, se actualizan los stocks.
