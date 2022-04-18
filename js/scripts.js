@@ -168,6 +168,7 @@ function addToCart(id) {
     setStorage(cart);
   }
   cartLength();
+  localStorage.setItem("realStock", JSON.stringify(upToDateStock));
 }
 
 // Funcion renderCart, lo que hace es agregar en la seccion del HTML los productos que se van seleccionando.
@@ -246,37 +247,41 @@ function deleteProduct(id) {
   });
   tr.remove();
 
-  // Vamos a crear una funcion que cuente cuantos items distintos tenemos en el cart:
+  // Recorremos este bucle para que cuente cuantos items distintos tenemos en el cart:
   let cartCounterVariety = 0;
   for (prods of cart) {
     cartCounterVariety++;
   }
+  console.log(cartCounterVariety);
   // Vamos a actualizar el realStock para que este vinculado al del cart.
   // Uso upToDateStock porque ya es una variable en el codigo, asi no tengo que volver a cearla trayendo a realStock del localStorage.
   let realStockActualizator = JSON.parse(localStorage.getItem("cartStock0"));
-  let realStorage;
   let titleFromDifferentProduct;
   for (upToProds of upToDateStock) {
     let validationCounter = 0;
-    for (cartProds of cart) {
-      if (upToProds.title === cartProds.title) {
-        break;
-      } else if (upToProds.title !== cartProds.title) {
-        validationCounter++;
-        titleFromDifferentProduct = upToProds.title;
-        // console.log(titleFromDifferentProduct);
+    if (cart.length > 0) {
+      for (cartProds of cart) {
+        if (upToProds.title === cartProds.title) {
+          break;
+        } else if (upToProds.title !== cartProds.title) {
+          validationCounter++;
+          titleFromDifferentProduct = upToProds.title;
+        }
+        if (validationCounter == cartCounterVariety) {
+          console.log("Nos vamos acercando: " + upToProds.title);
+          let workingProduct = upToProds.id;
+          upToDateStock[workingProduct].stock =
+            realStockActualizator[workingProduct].stock;
+        }
       }
-      if (validationCounter == cartCounterVariety) {
-        console.log("Nos vamos acercando: " + upToProds.title);
-        let workingProduct = upToProds.id;
-        console.log(upToProds.stock);
-        upToDateStock[workingProduct].stock =
-          realStockActualizator[workingProduct].stock;
-        console.log(upToDateStock[workingProduct].stock);
-        console.log(realStockActualizator[workingProduct].stock);
-      }
+      localStorage.setItem("realStock", JSON.stringify(upToDateStock));
+    }
+    if (cart.length == 0) {
+      console.log("estamos aca");
+      localStorage.setItem("realStock", JSON.stringify(bringProducts));
+      defineUpToDateStock();
     }
   }
-  localStorage.setItem("realStock", JSON.stringify(upToDateStock));
+  console.log(upToDateStock);
   cartLength();
 }

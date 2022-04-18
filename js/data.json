@@ -21,7 +21,7 @@
     "id": 2,
     "title": "Aromatizante de lavanda",
     "price": 550,
-    "stock": 3,
+    "stock": 2,
     "image": "./images/hogar-holístico.jpeg",
     "status": "normal",
     "cantidad": 0
@@ -39,7 +39,7 @@
     "id": 4,
     "title": "Aromatizante Daytime",
     "price": 530,
-    "stock": 3,
+    "stock": 2,
     "image": "./images/hogar-holístico.jpeg",
     "status": "normal",
     "cantidad": 0
@@ -48,7 +48,7 @@
     "id": 5,
     "title": "Aromatizante Morning",
     "price": 540,
-    "stock": 1,
+    "stock": 2,
     "image": "./images/hogar-holístico.jpeg",
     "status": "offer",
     "cantidad": 0
@@ -57,7 +57,7 @@
     "id": 6,
     "title": "Aromatizante de Eucaliptus",
     "price": 500,
-    "stock": 0,
+    "stock": 2,
     "image": "./images/hogar-holístico.jpeg",
     "status": "normal",
     "cantidad": 0
@@ -66,7 +66,7 @@
     "id": 7,
     "title": "Aromatizante de Limon",
     "price": 540,
-    "stock": 3,
+    "stock": 2,
     "image": "./images/hogar-holístico.jpeg",
     "status": "offer",
     "cantidad": 0
