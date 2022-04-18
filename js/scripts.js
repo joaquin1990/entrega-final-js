@@ -247,14 +247,14 @@ function deleteProduct(id) {
   });
   tr.remove();
 
-  // Recorremos este bucle para que cuente cuantos items distintos tenemos en el cart:
+  // Recorremos este bucle para que cuente cuantos items distintos tenemos en el cart. Esta variable la usamos abajo para ayudarnos con la logica para recorrer los bucles de upToDateStock y cart, y verificar si
   let cartCounterVariety = 0;
   for (prods of cart) {
     cartCounterVariety++;
   }
   console.log(cartCounterVariety);
-  // Vamos a actualizar el realStock para que este vinculado al del cart.
-  // Uso upToDateStock porque ya es una variable en el codigo, asi no tengo que volver a cearla trayendo a realStock del localStorage.
+  // Vamos a actualizar el realStock para que este vinculado al del cart cuando eliminemos productos desde el carrito.
+  // Aca lo que hicimos fue,
   let realStockActualizator = JSON.parse(localStorage.getItem("cartStock0"));
   let titleFromDifferentProduct;
   for (upToProds of upToDateStock) {
@@ -268,7 +268,6 @@ function deleteProduct(id) {
           titleFromDifferentProduct = upToProds.title;
         }
         if (validationCounter == cartCounterVariety) {
-          console.log("Nos vamos acercando: " + upToProds.title);
           let workingProduct = upToProds.id;
           upToDateStock[workingProduct].stock =
             realStockActualizator[workingProduct].stock;
@@ -277,7 +276,6 @@ function deleteProduct(id) {
       localStorage.setItem("realStock", JSON.stringify(upToDateStock));
     }
     if (cart.length == 0) {
-      console.log("estamos aca");
       localStorage.setItem("realStock", JSON.stringify(bringProducts));
       defineUpToDateStock();
     }
