@@ -10,5 +10,5 @@
 // - Ver con pipe funcion de UpToTateStock(),  si digo que uno es igual al otro, ? (upToDateStock = backUp), se igualan los dos, no tendria modificarse unicamente el upToDateStock.
 // - Un HTML no puede tener vinculado un script.js que tengo funciones que se relacionen con IDs que no esten en ese JS?.
 // - Estoy con un tema para entender los if y los else if, cuando entra en uno y cuando entra en otro...
-// -
+// - Pasar todo a ingles.
 // -

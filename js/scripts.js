@@ -185,11 +185,11 @@ function renderCart() {
     <th scope="row">1</th>
     <td class="table__products">
     <img src=${item.image}  alt="">
-    <h6 class="title">${item.title}</h6>
+    <h6 class="title-${item.id}">${item.title}</h6>
     </td>
     <td class="table__price"><p>$ ${item.price}</p></td>
     <td class="table__cantidad">
-    <input type="number" min="1" value=${item.cantidad} class="input__elemento">
+    <input onclick="cartInputChange(${item.id})" type="number" min="1" value=${item.cantidad} class="input-element-${item.id}">
     <button onclick="deleteProduct(${item.id})" id=deleteButton-${item.id} class="select delete btn btn-danger">x</button>
     </td>
     
@@ -239,7 +239,7 @@ window.onload = function () {
 function deleteProduct(id) {
   const deleteButton = document.getElementById("deleteButton-" + id);
   const tr = deleteButton.closest(".cartItem");
-  const title = tr.querySelector(".title").textContent;
+  const title = tr.querySelector(".title-" + id).textContent;
   cart.forEach((prods) => {
     if (prods.title === title) {
       const indexProd = cart.findIndex((prods) => prods.title === title);
@@ -254,7 +254,6 @@ function deleteProduct(id) {
   for (prods of cart) {
     cartCounterVariety++;
   }
-
   // Vamos a actualizar el realStock para que este vinculado al del cart cuando eliminemos productos desde el carrito.
   // Aca lo que hicimos fue,
   // La variable "validationCounter" la usamos para compararla con la variable "cartCounterVariety", cuando son iguales, quiere decir que el bucle for en el cart se recorrio las mismas veces que la cantidad de productos en el cart, entonces son productos que no estan en el cart, por lo tanto el stock hay que igualarlo al original, porque puede que algun producto se haya eliminado, por eso es necesario actualizar el stock.
@@ -288,6 +287,18 @@ function deleteProduct(id) {
 }
 
 // Funcion para darle funcionalidad a los inputs del cart para subir o bajar productos.
+function cartInputChange(id) {
+  let productValue = parseInt(
+    document.querySelector(".input-element-" + id).value
+  );
+  let index = cart.findIndex((prod) => prod.id === id);
+  console.log(cart[index].cantidad);
+  cart[index].cantidad = productValue;
+  console.log(productValue);
+  setStorage(cart);
+
+  totalPrice();
+}
 
 // Funcion "totalPrice()" que va a sumar el precio total que tenemos en el carrito:
 const cartTotal = document.querySelector(".cartTotal");
