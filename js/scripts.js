@@ -3,6 +3,10 @@ function getStorage() {
   let storage = JSON.parse(localStorage.getItem("cart")) || [];
   return storage;
 }
+function getStorageAny(array) {
+  JSON.parse(localStorage.getItem(array));
+}
+
 function setStorage(array) {
   localStorage.setItem("cart", JSON.stringify(array));
 }
@@ -36,7 +40,6 @@ fetch("/js/data.json")
   .then(() => localStorage.setItem("cartStock0", JSON.stringify(bringProducts)))
   .then(() => saleProducts())
   .then(() => defineUpToDateStock());
-// .then(() => deleteProduct());
 
 // Funcion para que se muestren los productos en oferta unicamente al presionar el enlace "oferta"
 function saleProducts() {
@@ -46,11 +49,11 @@ function saleProducts() {
   saleButton.onclick = () => generateCards(saleProducts);
 }
 
-// Funcion "defineUpToStock" con condicional, para que dependiendo de la situacion, si ya hay items en el carrito o no, UpToDateStock copie al "cartStock" o que se inicie copiando a backUp.
+// Funcion "defineUpToStock" con condicional, para que dependiendo de la situacion, si ya hay items en el carrito o no, UpToDateStock copie al "realStock" o que se inicie copiando a backUp, y no a bringProductos, porque sino bringProducts se me modifica tambien.
 function defineUpToDateStock() {
-  localStorage.getItem("cartStock") === null
+  localStorage.getItem("realStock") === null
     ? (upToDateStock = backUp)
-    : (upToDateStock = JSON.parse(localStorage.getItem("cartStock")));
+    : (upToDateStock = JSON.parse(localStorage.getItem("realStock")));
 }
 
 // Validacion de si el cart en el local storage es null, o si tiene elementos adentro con un ternario.
@@ -139,10 +142,8 @@ function addToCart(id) {
   // Modificacion de stock:
   let modifiedStock = upToDateStock[id].stock - quantityValue;
   upToDateStock[id].stock = modifiedStock;
-  localStorage.setItem("cartStock", JSON.stringify(upToDateStock));
-  let selectedProduct = backUp.find((element) => element.id === id);
-  console.log(backUp);
-  console.log(upToDateStock);
+  localStorage.setItem("realStock", JSON.stringify(upToDateStock));
+  let selectedProduct = bringProducts.find((element) => element.id === id);
   let index = cart.findIndex((prod) => prod.id === id);
   if (index !== -1) {
     cart[index].cantidad = cart[index].cantidad + quantityValue;
@@ -243,10 +244,39 @@ function deleteProduct(id) {
       setStorage(cart);
     }
   });
-
-  console.log(title);
-
   tr.remove();
-}
 
-// Tendriamos que correlacionar los stock de los 3 localStorage para que si elimino algo del cart, que se modifique tambien en los otros lugares. Asi cuando eliminamos algo del carrito, se actualizan los stocks.
+  // Vamos a crear una funcion que cuente cuantos items distintos tenemos en el cart:
+  let cartCounterVariety = 0;
+  for (prods of cart) {
+    cartCounterVariety++;
+  }
+  // Vamos a actualizar el realStock para que este vinculado al del cart.
+  // Uso upToDateStock porque ya es una variable en el codigo, asi no tengo que volver a cearla trayendo a realStock del localStorage.
+  let realStockActualizator = JSON.parse(localStorage.getItem("cartStock0"));
+  let realStorage;
+  let titleFromDifferentProduct;
+  for (upToProds of upToDateStock) {
+    let validationCounter = 0;
+    for (cartProds of cart) {
+      if (upToProds.title === cartProds.title) {
+        break;
+      } else if (upToProds.title !== cartProds.title) {
+        validationCounter++;
+        titleFromDifferentProduct = upToProds.title;
+        // console.log(titleFromDifferentProduct);
+      }
+      if (validationCounter == cartCounterVariety) {
+        console.log("Nos vamos acercando: " + upToProds.title);
+        let workingProduct = upToProds.id;
+        console.log(upToProds.stock);
+        upToDateStock[workingProduct].stock =
+          realStockActualizator[workingProduct].stock;
+        console.log(upToDateStock[workingProduct].stock);
+        console.log(realStockActualizator[workingProduct].stock);
+      }
+    }
+  }
+  localStorage.setItem("realStock", JSON.stringify(upToDateStock));
+  cartLength();
+}
