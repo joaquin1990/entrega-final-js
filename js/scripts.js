@@ -39,7 +39,8 @@ fetch("/js/data.json")
   .then(() => generateCards(bringProducts))
   .then(() => localStorage.setItem("cartStock0", JSON.stringify(bringProducts)))
   .then(() => saleProducts())
-  .then(() => defineUpToDateStock());
+  .then(() => defineUpToDateStock())
+  .then(() => totalPrice());
 
 // Funcion para que se muestren los productos en oferta unicamente al presionar el enlace "oferta"
 function saleProducts() {
@@ -169,6 +170,7 @@ function addToCart(id) {
   }
   cartLength();
   localStorage.setItem("realStock", JSON.stringify(upToDateStock));
+  totalPrice();
 }
 
 // Funcion renderCart, lo que hace es agregar en la seccion del HTML los productos que se van seleccionando.
@@ -247,14 +249,15 @@ function deleteProduct(id) {
   });
   tr.remove();
 
-  // Recorremos este bucle para que cuente cuantos items distintos tenemos en el cart. Esta variable la usamos abajo para ayudarnos con la logica para recorrer los bucles de upToDateStock y cart, y verificar si
+  // Recorremos este bucle para que cuente cuantos items distintos tenemos en el cart. Esta la variable "cartCounterVariety" la usamos abajo para ayudarnos con la logica para recorrer los bucles de upToDateStock y cart, y verificar coincide o no con "validationCounter".
   let cartCounterVariety = 0;
   for (prods of cart) {
     cartCounterVariety++;
   }
-  console.log(cartCounterVariety);
+
   // Vamos a actualizar el realStock para que este vinculado al del cart cuando eliminemos productos desde el carrito.
   // Aca lo que hicimos fue,
+  // La variable "validationCounter" la usamos para compararla con la variable "cartCounterVariety", cuando son iguales, quiere decir que el bucle for en el cart se recorrio las mismas veces que la cantidad de productos en el cart, entonces son productos que no estan en el cart, por lo tanto el stock hay que igualarlo al original, porque puede que algun producto se haya eliminado, por eso es necesario actualizar el stock.
   let realStockActualizator = JSON.parse(localStorage.getItem("cartStock0"));
   let titleFromDifferentProduct;
   for (upToProds of upToDateStock) {
@@ -268,9 +271,9 @@ function deleteProduct(id) {
           titleFromDifferentProduct = upToProds.title;
         }
         if (validationCounter == cartCounterVariety) {
-          let workingProduct = upToProds.id;
-          upToDateStock[workingProduct].stock =
-            realStockActualizator[workingProduct].stock;
+          let actualProduct = upToProds.id;
+          upToDateStock[actualProduct].stock =
+            realStockActualizator[actualProduct].stock;
         }
       }
       localStorage.setItem("realStock", JSON.stringify(upToDateStock));
@@ -280,6 +283,20 @@ function deleteProduct(id) {
       defineUpToDateStock();
     }
   }
-  console.log(upToDateStock);
   cartLength();
+  totalPrice();
+}
+
+// Funcion para darle funcionalidad a los inputs del cart para subir o bajar productos.
+
+// Funcion "totalPrice()" que va a sumar el precio total que tenemos en el carrito:
+const cartTotal = document.querySelector(".cartTotal");
+function totalPrice() {
+  let actualPrice = 0;
+  for (item of cart) {
+    actualPrice += item.price * item.cantidad;
+  }
+  if (cart.length > 0) {
+    cartTotal.innerHTML = "Total: $" + actualPrice;
+  } else cartTotal.innerHTML = "total: $" + actualPrice;
 }
