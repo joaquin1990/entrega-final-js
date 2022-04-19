@@ -182,7 +182,6 @@ function renderCart() {
     const tr = document.createElement("tr");
     tr.classList.add("cartItem");
     const content = `
-    <th scope="row">1</th>
     <td class="table__products">
     <img src=${item.image}  alt="">
     <h6 class="title-${item.id}">${item.title}</h6>
