@@ -287,19 +287,40 @@ function deleteProduct(id) {
 }
 
 // Funcion para darle funcionalidad a los inputs del cart para subir o bajar productos.
+
 function cartInputChange(id) {
-  let productValue = parseInt(
+  let newProductValue = parseInt(
     document.querySelector(".input-element-" + id).value
   );
   let index = cart.findIndex((prod) => prod.id === id);
-  console.log(cart[index].cantidad);
-  cart[index].cantidad = productValue;
-  console.log(productValue);
+  const previousCartQuantity = cart[index].cantidad;
+  const actualCartQuantity = newProductValue;
+  // Condicionales para comprobar si hay stock o no para poder hacer el cambio.
+  const stockActualizator = actualCartQuantity - previousCartQuantity;
+  upToDateStock[id].stock = upToDateStock[id].stock - stockActualizator;
+  if (upToDateStock[id].stock < 0) {
+    upToDateStock[id].stock = upToDateStock[id].stock + stockActualizator;
+    cart[index].cantidad = cart[index].cantidad;
+    swal(
+      `Contamos unicamente con ${
+        bringProducts[id].stock
+      } unidades de "${upToDateStock[id].title.toLocaleUpperCase()}".`,
+      "Mil disculpas!"
+    );
+    document.querySelector(".input-element-" + id).innerHTML =
+      previousCartQuantity;
+    window.setTimeout(function () {
+      location.reload();
+    }, 2500);
+    return;
+  }
+  cart[index].cantidad = newProductValue;
+  console.log(upToDateStock);
+  console.log(cart);
+  localStorage.setItem("realStock", JSON.stringify(upToDateStock));
   setStorage(cart);
-
   totalPrice();
 }
-
 // Funcion "totalPrice()" que va a sumar el precio total que tenemos en el carrito:
 const cartTotal = document.querySelector(".cartTotal");
 function totalPrice() {
@@ -309,5 +330,5 @@ function totalPrice() {
   }
   if (cart.length > 0) {
     cartTotal.innerHTML = "Total: $" + actualPrice;
-  } else cartTotal.innerHTML = "total: $" + actualPrice;
+  } else cartTotal.innerHTML = "Total: $" + actualPrice;
 }
