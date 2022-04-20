@@ -327,7 +327,5 @@ function totalPrice() {
   for (item of cart) {
     actualPrice += item.price * item.cantidad;
   }
-  if (cart.length > 0) {
-    cartTotal.innerHTML = "Total: $" + actualPrice;
-  } else cartTotal.innerHTML = "Total: $" + actualPrice;
+  cartTotal.innerHTML = "Precio Total: $" + actualPrice;
 }
