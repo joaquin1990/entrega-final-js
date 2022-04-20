@@ -1,6 +1,9 @@
 main {
   min-height: 85vh;
 }
+body {
+  min-height: 85vh;
+}
 
 header {
   z-index: 100;
@@ -36,13 +39,22 @@ header {
   background-color: rgb(215, 90, 90);
 }
 
-/* Para poner en el JS */
-/* swal({
-  title: "Apakah anda yakin?",
-  text: "Anda dapat mengaktifkannya lagi nanti...",
-  icon: "warning",
-  buttons: {
-    confirm: { text: "Ubah", className: "sweet-warning" },
-    cancel: "Batalkan",
-  },
-}); */
+.rounded {
+  border-radius: 1rem;
+}
+
+.nav-pills .nav-link {
+  color: #555;
+}
+
+.nav-pills .nav-link.active {
+  color: white;
+}
+
+input[type="radio"] {
+  margin-right: 5px;
+}
+
+.bold {
+  font-weight: bold;
+}

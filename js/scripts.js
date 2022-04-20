@@ -168,8 +168,9 @@ function addToCart(id) {
     );
     setStorage(cart);
   }
-  cartLength();
   localStorage.setItem("realStock", JSON.stringify(upToDateStock));
+  generateCards(upToDateStock);
+  cartLength();
   totalPrice();
 }
 
@@ -257,7 +258,6 @@ function deleteProduct(id) {
   // Aca lo que hicimos fue,
   // La variable "validationCounter" la usamos para compararla con la variable "cartCounterVariety", cuando son iguales, quiere decir que el bucle for en el cart se recorrio las mismas veces que la cantidad de productos en el cart, entonces son productos que no estan en el cart, por lo tanto el stock hay que igualarlo al original, porque puede que algun producto se haya eliminado, por eso es necesario actualizar el stock.
   let realStockActualizator = JSON.parse(localStorage.getItem("cartStock0"));
-  let titleFromDifferentProduct;
   for (upToProds of upToDateStock) {
     let validationCounter = 0;
     if (cart.length > 0) {
@@ -266,7 +266,6 @@ function deleteProduct(id) {
           break;
         } else if (upToProds.title !== cartProds.title) {
           validationCounter++;
-          titleFromDifferentProduct = upToProds.title;
         }
         if (validationCounter == cartCounterVariety) {
           let actualProduct = upToProds.id;
@@ -314,9 +313,8 @@ function cartInputChange(id) {
     return;
   }
   cart[index].cantidad = newProductValue;
-  console.log(upToDateStock);
-  console.log(cart);
   localStorage.setItem("realStock", JSON.stringify(upToDateStock));
+  generateCards(upToDateStock);
   setStorage(cart);
   totalPrice();
 }
