@@ -27,7 +27,6 @@ cartLength();
 
 // Fetch para empezar a trabajar con una base de datos traida desde un archivo data.JSON:
 let bringProducts = [];
-let cart;
 let testing;
 let upToDateStock;
 let backUp;

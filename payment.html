@@ -30,6 +30,7 @@
     <link href="css/styles.css" rel="stylesheet" />
   </head>
   <body>
+    <div>
     <!-- Navigation-->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container px-4 px-lg-5">
@@ -75,7 +76,7 @@
               <h1 class="display-6">Seccion de Pago</h1>
           </div>
       </div> <!-- End -->
-      <div class="row">
+      <div id="seccionDePagos" class="row">
           <div class="col-lg-6 mx-auto">
               <div class="card ">
                   <div class="card-header">
@@ -115,7 +116,7 @@
                                               </label> <input type="text" required class="form-control"> </div>
                                       </div>
                                   </div>
-                                  <div class="card-footer"> <button type="button" class="subscribe btn btn-primary btn-block shadow-sm"> Realizar Pago </button>
+                                  <div class="card-footer"> <button type="button" class="subscribe btn btn-primary btn-block shadow-sm container"> Realizar Pago </button>
                               </form>
                           </div>
                       </div> <!-- End -->
@@ -149,7 +150,6 @@
                           <p class="text-muted">Note: After clicking on the button, you will be directed to a secure gateway for payment. After completing the payment process, you will be redirected back to the website to view details of your order. </p>
                       </div> <!-- End -->
                       <div id="spinnerPlace" class="text-center">
-                         
                       </div>
                     </div>
                       <!-- End -->
@@ -195,10 +195,10 @@
           </nav>
         </div>
       </footer>
+      <!-- Core theme JS-->
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
       <!-- Bootstrap core JS-->
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-      <!-- Core theme JS-->
-      <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
       <script src="js/pagos.js"></script>
     </body>
   </html>

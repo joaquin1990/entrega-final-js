@@ -60,9 +60,9 @@ input[type="radio"] {
 }
 
 .whiteSquare {
-  padding: 25px;
+  padding: 15px;
   position: relative;
   border: 0.1px solid black;
-  margin: 5px black;
+  margin: 15px black;
   background-color: rgb(246, 196, 163);
 }

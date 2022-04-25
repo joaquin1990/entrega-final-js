@@ -6,12 +6,11 @@
 // -
 // -
 // - CON PIPE
-// - Con una variable que es una funcion, es como estar llamandola?
 // - Ver como hacer para que si estoy en zona de oferta, al cerrar un alert, que se quede en la pagina de ofertas, que no se vaya a otra pagina.
+// Buscar redirect.
 // - Ver con pipe funcion de UpToTateStock(),  si digo que uno es igual al otro, ? (upToDateStock = backUp), se igualan los dos, no tendria modificarse unicamente el upToDateStock.
-// - Un HTML no puede tener vinculado un script.js que tengo funciones que se relacionen con IDs que no esten en ese JS?.
-// - Estoy con un tema para entender los if y los else if, cuando entra en uno y cuando entra en otro...
-// - Como funcionan los forEach y esos metodos, se puede hacer un contador que le suma 1 en cada vuelta, o no es como un for en ese sentido.
-// -
-// -
+// No deberia pasar, probarlo de nuevo.
+// - Que se vuelva para la pagina principal o que de un mensaje despues de que terminemos de ejecutar el pago.
+// Buscar redirect.
+// - Buscar falsys y truthifs
 // -
