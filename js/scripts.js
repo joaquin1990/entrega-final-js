@@ -11,8 +11,7 @@ function setStorage(array) {
   localStorage.setItem("cart", JSON.stringify(array));
 }
 
-// Con este fragmento de codigo contamos cuantos items hay en el cart independientemente de si alguno de los items se repite, cuenta como mas de uno. Tambien esta adentro de la funcion de addToCart porque sino cuando se ejecuta la funcion no se actualiza
-
+// Con este fragmento de codigo contamos cuantos items hay en el cart independientemente de si alguno de los items se repite, cuenta como mas de uno.
 function cartLength() {
   const bringCart = getStorage();
   if (bringCart !== null) {
@@ -25,11 +24,13 @@ function cartLength() {
 }
 cartLength();
 
-// Fetch para empezar a trabajar con una base de datos traida desde un archivo data.JSON:
+// Fetch para empezar a trabajar con una base de datos traida desde un archivo "data.json":
+let cart;
 let bringProducts = [];
 let testing;
 let upToDateStock;
 let backUp;
+let actualStock;
 fetch("/js/data.json")
   .then((res) => res.json())
   .then((data) => {
@@ -37,20 +38,28 @@ fetch("/js/data.json")
   })
   .then(() => generateCards(bringProducts))
   .then(() => localStorage.setItem("cartStock0", JSON.stringify(bringProducts)))
-  .then(() => saleProducts())
   .then(() => defineUpToDateStock())
+  .then(() => generateCards(upToDateStock))
+  .then(() => saleProducts())
   .then(() => totalPrice());
 
-// Funcion para que se muestren los productos en oferta unicamente al presionar el enlace "oferta"
+// Funcion saleProducts para que se muestren los productos en oferta unicamente al presionar el enlace "oferta"
+
 function saleProducts() {
-  backUp = JSON.parse(localStorage.getItem("cartStock0"));
-  const saleProducts = backUp.filter((product) => product.status === "offer");
+  JSON.parse(localStorage.getItem("realStock")) == null
+    ? (actualStock = JSON.parse(localStorage.getItem("cartStock0")))
+    : (actualStock = JSON.parse(localStorage.getItem("realStock")));
+  const saleProducts = upToDateStock.filter(
+    (product) => product.status === "offer"
+  );
   const saleButton = document.getElementById("sale-product");
   saleButton.onclick = () => generateCards(saleProducts);
+  console.log(saleProducts);
 }
 
-// Funcion "defineUpToStock" con condicional, para que dependiendo de la situacion, si ya hay items en el carrito o no, UpToDateStock copie al "realStock" o que se inicie copiando a backUp, y no a bringProductos, porque sino bringProducts se me modifica tambien.
+// Funcion "defineUpToStock" con condicional, para que dependiendo de la situacion, si ya hay items en el carrito o no, UpToDateStock copie al "realStock" o que se inicie copiando a backUp.
 function defineUpToDateStock() {
+  backUp = JSON.parse(localStorage.getItem("cartStock0"));
   localStorage.getItem("realStock") === null
     ? (upToDateStock = backUp)
     : (upToDateStock = JSON.parse(localStorage.getItem("realStock")));
@@ -254,7 +263,6 @@ function deleteProduct(id) {
     cartCounterVariety++;
   }
   // Vamos a actualizar el realStock para que este vinculado al del cart cuando eliminemos productos desde el carrito.
-  // Aca lo que hicimos fue,
   // La variable "validationCounter" la usamos para compararla con la variable "cartCounterVariety", cuando son iguales, quiere decir que el bucle for en el cart se recorrio las mismas veces que la cantidad de productos en el cart, entonces son productos que no estan en el cart, por lo tanto el stock hay que igualarlo al original, porque puede que algun producto se haya eliminado, por eso es necesario actualizar el stock.
   let realStockActualizator = JSON.parse(localStorage.getItem("cartStock0"));
   for (upToProds of upToDateStock) {
@@ -281,6 +289,7 @@ function deleteProduct(id) {
   }
   cartLength();
   totalPrice();
+  generateCards(upToDateStock);
 }
 
 // Funcion para darle funcionalidad a los inputs del cart para subir o bajar productos.

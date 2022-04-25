@@ -3,6 +3,10 @@
 // - Ver de cambiar los colores de los botones que estan medio fuleros.
 // - Cambiar el que se generen cards, antes de que le tengas que dar de nuevo el click, para que te muestre que no hay mas stock en el momento indicado
 // - Pasar todo a ingles.
+// - Acomodar saleProducts() que muestre el stock bien, que genere las cards a partir de algun
+// - Probar lo de backup y uptodatestock a ver si se cambian en defineupToDateStock()
+// -
+// -
 // -
 // -
 // - CON PIPE
